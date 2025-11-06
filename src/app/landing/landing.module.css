@@ -1,0 +1,27 @@
+.vehicleGrid {
+  display: flex;
+  row-gap: 1.5em;
+  margin: 1em;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
+
+.searchBarContainer {
+  margin: 2em;
+  display: flex;
+  justify-content: center;
+}
+
+.searchBar {
+  width: 40em;
+}
+
+.rentalModal {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5em;
+}
+
+.modalHeader {
+  color: rgb(12, 7, 32);
+}

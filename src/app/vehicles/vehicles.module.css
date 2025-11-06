@@ -1,0 +1,16 @@
+.pagination {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+
+.vehicleModal {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5em;
+}
+
+.modalHeader{
+  color: rgb(12, 7, 32);
+}
