@@ -38,7 +38,7 @@ export default function LandingPage() {
           else {
             setSearch({
               ...search, filters: [{
-                operator: '=',
+                operator: '=*',
                 value: event.target.value,
                 propertyName: 'displayName'
               }]

@@ -26,8 +26,11 @@ import VehicleModal from './vehicle.modal';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { SearchRequest } from '@/api/models/search.interface';
 import EditIcon from '@mui/icons-material/Edit';
+import { Avatar } from '@mui/material';
+import { useSnackbar } from 'notistack';
 
-export default function VehiclesPage(rows: [], headCells: []) {
+export default function VehiclesPage(headCells: []) {
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar()
   const [vehicles, setVehicles] = useState<VehicleResponse[]>([]);
   const [patchVehicle, setPatchVehicle] = useState<PatchVehicleRequest | null>(null);
   const [total, setTotal] = useState<number>(0);
@@ -60,7 +63,11 @@ export default function VehiclesPage(rows: [], headCells: []) {
   }, [searchRequest]);
 
   headCells = [
-
+    {
+      id: 'photoUrl',
+      numeric: false,
+      disablePadding: false,
+    },
     {
       id: 'displayName',
       numeric: false,
@@ -117,6 +124,12 @@ export default function VehiclesPage(rows: [], headCells: []) {
       label: 'Status',
     },
     {
+      id: 'rentalPrice',
+      numeric: false,
+      disablePadding: false,
+      label: 'Rental Price',
+    },
+    {
       id: 'actions',
       numeric: false,
       disablePadding: false,
@@ -169,6 +182,15 @@ export default function VehiclesPage(rows: [], headCells: []) {
 
   async function deleteVehicle(id: number) {
     var response = await CarRentalService.deleteVehicle(id)
+    if (response.status == 400) {
+      enqueueSnackbar(`Failed to delete Vehicle: ${response?.errors[0]?.reason}`, {
+        variant: 'error'
+      })
+    } else {
+      enqueueSnackbar('Vehicle Deleted', {
+        variant: 'success'
+      })
+    }
     await refreshVehicles();
   }
   function editVehicle(vehicle: VehicleResponse) {
@@ -285,6 +307,7 @@ export default function VehiclesPage(rows: [], headCells: []) {
                       key={row.id}
                       sx={{ cursor: 'pointer' }}
                     >
+                      <TableCell align="left"> <Avatar alt="Remy Sharp" src={row.photoUrl} /></TableCell>
                       <TableCell align="left">{row.displayName}</TableCell>
                       <TableCell align="left">{row.registrationNumber}</TableCell>
                       <TableCell align="left">{row.year}</TableCell>
@@ -294,6 +317,7 @@ export default function VehiclesPage(rows: [], headCells: []) {
                       <TableCell align="left">{row.fuelType}</TableCell>
                       <TableCell align="left">{row.licenseExpiryDate}</TableCell>
                       <TableCell align="left">{row.vehicleStatus}</TableCell>
+                      <TableCell align="left">{row.rentalPrice}</TableCell>
                       <TableCell align="left">
                         <IconButton aria-label="edit"
                           onClick={() => {

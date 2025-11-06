@@ -26,8 +26,11 @@ import CustomerModal from './customer.modal';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { SearchRequest } from '@/api/models/search.interface';
 import EditIcon from '@mui/icons-material/Edit';
+import { useSnackbar } from 'notistack';
+import { HeadCell } from '@/components/models/headCell.interface';
 
-export default function CustomersPage(rows: [], headCells: []) {
+export default function CustomersPage() {
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar()
   const [customers, setCustomers] = useState<CustomerResponse[]>([]);
   const [patchCustomer, setPatchCustomer] = useState<PatchCustomerRequest | null>(null);
   const [total, setTotal] = useState<number>(0);
@@ -59,7 +62,7 @@ export default function CustomersPage(rows: [], headCells: []) {
     fetchData();
   }, [searchRequest]);
 
-  headCells = [
+  const headCells: HeadCell[] = [
 
     {
       id: 'firstName',
@@ -138,6 +141,15 @@ export default function CustomersPage(rows: [], headCells: []) {
 
   async function deleteCustomer(id: number) {
     var response = await CarRentalService.deleteCustomer(id)
+    if (response.status == 400) {
+      enqueueSnackbar(`Failed to delete Customer: ${response?.errors[0]?.reason}`, {
+        variant: 'error'
+      })
+    } else {
+      enqueueSnackbar('Customer Deleted', {
+        variant: 'success'
+      })
+    }
     await refreshCustomers();
   }
   function editCustomer(customer: CustomerResponse) {

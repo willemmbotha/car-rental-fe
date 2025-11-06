@@ -3,17 +3,11 @@
 import {
   CreateCustomerRequest,
   CustomerResponse,
-  PatchCustomerRequest,
 } from "./models/customer.interface";
-import {
-  CreateRentalRequest,
-  PatchRentalRequest,
-  RentalResponse,
-} from "./models/rental.interface";
+import { CreateRentalRequest, RentalResponse } from "./models/rental.interface";
 import { SearchRequest, SearchResponse } from "./models/search.interface";
 import {
   CreateVehicleRequest,
-  PatchVehicleRequest,
   VehicleResponse,
 } from "./models/vehicle.interface";
 
@@ -82,9 +76,7 @@ export const CarRentalService = {
     return await response.json();
   },
 
-  patchCustomer: async function (
-    req: PatchCustomerRequest
-  ): Promise<CustomerResponse> {
+  patchCustomer: async function (req: any): Promise<CustomerResponse> {
     const bearer = localStorage.getItem("DS");
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/customer/${req.id}`,
@@ -106,17 +98,22 @@ export const CarRentalService = {
 
   deleteCustomer: async function (id: number): Promise<void> {
     const bearer = localStorage.getItem("DS");
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/customer/${id}`, {
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-        Authorization: `Bearer ${bearer}`,
-      },
-      body: JSON.stringify({}),
-      cache: "no-store",
-      method: "DELETE",
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/customer/${id}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+          Authorization: `Bearer ${bearer}`,
+        },
+        body: JSON.stringify({}),
+        cache: "no-store",
+        method: "DELETE",
+      }
+    );
+
+    return await response.json();
   },
 
   createVehicle: async function (
@@ -140,9 +137,7 @@ export const CarRentalService = {
     return await response.json();
   },
 
-  patchVehicle: async function (
-    req: PatchVehicleRequest
-  ): Promise<VehicleResponse> {
+  patchVehicle: async function (req: any): Promise<VehicleResponse> {
     const bearer = localStorage.getItem("DS");
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/vehicle/${req.id}`,
@@ -163,17 +158,22 @@ export const CarRentalService = {
 
   deleteVehicle: async function (id: number): Promise<void> {
     const bearer = localStorage.getItem("DS");
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/vehicle/${id}`, {
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-        Authorization: `Bearer ${bearer}`,
-      },
-      body: JSON.stringify({}),
-      cache: "no-store",
-      method: "DELETE",
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/vehicle/${id}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+          Authorization: `Bearer ${bearer}`,
+        },
+        body: JSON.stringify({}),
+        cache: "no-store",
+        method: "DELETE",
+      }
+    );
+
+    return await response.json();
   },
 
   searchRentals: async function (
@@ -219,9 +219,7 @@ export const CarRentalService = {
     return await response.json();
   },
 
-  patchRental: async function (
-    req: PatchRentalRequest
-  ): Promise<RentalResponse> {
+  patchRental: async function (req: any): Promise<RentalResponse> {
     const bearer = localStorage.getItem("DS");
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/rental/${req.id}`,
@@ -240,18 +238,22 @@ export const CarRentalService = {
     return await response.json();
   },
 
-  deleteRental: async function (id: number): Promise<void> {
+  deleteRental: async function (id: number): Promise<any> {
     const bearer = localStorage.getItem("DS");
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/rental/${id}`, {
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-        Authorization: `Bearer ${bearer}`,
-      },
-      body: JSON.stringify({}),
-      cache: "no-store",
-      method: "DELETE",
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/rental/${id}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+          Authorization: `Bearer ${bearer}`,
+        },
+        body: JSON.stringify({}),
+        cache: "no-store",
+        method: "DELETE",
+      }
+    );
+    return await response.json();
   },
 };

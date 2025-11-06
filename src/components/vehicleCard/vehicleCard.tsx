@@ -26,10 +26,13 @@ export default function VehicleCard({ vehicle }) {
       <CardMedia
         component="img"
         height="194"
-        image="https://images.unsplash.com/photo-1489824904134-891ab64532f1?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1631"
+        image={vehicle.photoUrl ?? 'https://www.shutterstock.com/image-vector/car-logo-icon-emblem-design-600nw-473088037.jpg'}
         alt="Vehicle"
       />
       <CardContent>
+        <Typography variant="body1" sx={{ color: "text.secondary" }}>
+          Rental Price: <strong>R {vehicle.rentalPrice}</strong>
+        </Typography>
 
         <Typography variant="body2" sx={{ color: "text.secondary" }}>
           Make: <strong>{vehicle.make}</strong>

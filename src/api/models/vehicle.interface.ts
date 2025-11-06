@@ -9,6 +9,8 @@ export interface VehicleResponse {
   fuelType: string;
   licenseExpiryDate: string;
   vehicleStatus: string;
+  rentalPrice: number;
+  photoUrl?: string;
 }
 
 export interface CreateVehicleRequest {
@@ -21,6 +23,8 @@ export interface CreateVehicleRequest {
   fuelType: string;
   licenseExpiryDate: string;
   vehicleStatus: string;
+  rentalPrice: number;
+  photoUrl?: string;
 }
 
 export interface PatchVehicleRequest {
@@ -34,4 +38,6 @@ export interface PatchVehicleRequest {
   fuelType?: string;
   licenseExpiryDate?: string;
   vehicleStatus?: string;
+  rentalPrice?: number;
+  photoUrl?: string;
 }

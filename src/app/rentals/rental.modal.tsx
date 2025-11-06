@@ -5,9 +5,10 @@ import { CarRentalService } from "@/api/carRentalService";
 import { useEffect, useState } from "react";
 import { CustomerResponse } from "@/api/models/customer.interface";
 import { VehicleResponse } from "@/api/models/vehicle.interface";
+import { useSnackbar } from "notistack";
 
 export default function RentalModal({ open, setOpen, handleClose, patchRental }) {
-
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar()
   const [rental, setRental] = useState<CreateRentalRequest | null>(null);
 
   const [customers, setCustomers] = useState<CustomerResponse[]>([]);
@@ -17,10 +18,21 @@ export default function RentalModal({ open, setOpen, handleClose, patchRental })
 
   const saveRental = async () => {
 
+    let result = null;
     if (patchRental) {
-      await CarRentalService.patchRental(rental!);
+      result = await CarRentalService.patchRental(rental!);
     } else {
-      await CarRentalService.createRental(rental!);
+      result = await CarRentalService.createRental(rental!);
+    }
+
+    if (result.status == 400) {
+      enqueueSnackbar(`Failed to save Rental: ${result?.errors[0]?.reason}`, {
+        variant: 'error'
+      })
+    } else {
+      enqueueSnackbar('Rental Saved', {
+        variant: 'success'
+      })
     }
   }
 
@@ -141,7 +153,7 @@ export default function RentalModal({ open, setOpen, handleClose, patchRental })
             }
           </Select>
         </FormControl>
-    
+
         <TextField
           required
           id="outlined-startDate"

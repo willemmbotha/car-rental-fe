@@ -3,9 +3,10 @@ import styles from "./vehicles.module.css";
 import { CreateVehicleRequest } from "@/api/models/vehicle.interface";
 import { CarRentalService } from "@/api/carRentalService";
 import { useEffect, useState } from "react";
+import { useSnackbar } from "notistack";
 
 export default function VehicleModal({ open, setOpen, handleClose, patchVehicle }) {
-
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar()
   const [vehicle, setVehicle] = useState<CreateVehicleRequest | null>(null);
 
   const fuelTypes: string[] = ['Petrol', 'Diesel', 'Electric', 'Hybrid'];
@@ -15,10 +16,21 @@ export default function VehicleModal({ open, setOpen, handleClose, patchVehicle 
 
   const saveVehicle = async () => {
 
+    let result = null;
     if (patchVehicle) {
-      await CarRentalService.patchVehicle(vehicle!);
+      result = await CarRentalService.patchVehicle(vehicle!);
     } else {
-      await CarRentalService.createVehicle(vehicle!);
+      result = await CarRentalService.createVehicle(vehicle!);
+    }
+
+    if (result.status == 400) {
+      enqueueSnackbar(`Failed to save Rental: ${result?.errors[0]?.reason}`, {
+        variant: 'error'
+      })
+    } else {
+      enqueueSnackbar('Rental Saved', {
+        variant: 'success'
+      })
     }
   }
 
@@ -28,6 +40,7 @@ export default function VehicleModal({ open, setOpen, handleClose, patchVehicle 
     } else {
       setVehicle(null)
     }
+
 
   }, [patchVehicle])
 
@@ -147,7 +160,6 @@ export default function VehicleModal({ open, setOpen, handleClose, patchVehicle 
           }}
         />
 
-
         <FormControl fullWidth>
           <InputLabel>Vehicle Status</InputLabel>
           <Select
@@ -165,6 +177,26 @@ export default function VehicleModal({ open, setOpen, handleClose, patchVehicle 
             }
           </Select>
         </FormControl>
+
+        <TextField
+          required
+          id="outlined-rentalPrice"
+          label="Rental Price"
+          value={vehicle?.rentalPrice}
+          onChange={event => {
+            setVehicle({ ...vehicle, rentalPrice: event.target.value });
+          }}
+        />
+
+        <TextField
+          required
+          id="outlined-photUrl"
+          label="Photo"
+          value={vehicle?.photoUrl}
+          onChange={event => {
+            setVehicle({ ...vehicle, photoUrl: event.target.value });
+          }}
+        />
 
         <Button variant="text" onClick={saveVehicle}>Save</Button>
       </Box>

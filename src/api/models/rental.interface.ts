@@ -1,3 +1,6 @@
+import { CustomerResponse } from "./customer.interface";
+import { VehicleResponse } from "./vehicle.interface";
+
 export interface RentalResponse {
   id: number;
   customerId: number;
@@ -22,4 +25,13 @@ export interface PatchRentalRequest {
   startDate?: string;
   endDate?: string;
   rentalStatus?: string;
+}
+
+export interface RentalSearchResponse {
+  id: number;
+  customer: CustomerResponse;
+  vehicle: VehicleResponse;
+  startDate: string;
+  endDate: string;
+  rentalStatus: string;
 }

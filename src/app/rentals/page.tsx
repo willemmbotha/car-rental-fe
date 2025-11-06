@@ -25,11 +25,13 @@ import RentalModal from './rental.modal';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { SearchRequest } from '@/api/models/search.interface';
 import EditIcon from '@mui/icons-material/Edit';
-import { RentalResponse, PatchRentalRequest } from '@/api/models/rental.interface';
+import { RentalResponse, PatchRentalRequest, RentalSearchResponse } from '@/api/models/rental.interface';
+import { useSnackbar } from 'notistack';
 
 
-export default function RentalsPage(rows: [], headCells: []) {
-  const [rentals, setRentals] = useState<RentalResponse[]>([]);
+export default function RentalsPage(headCells: []) {
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar()
+  const [rentals, setRentals] = useState<RentalSearchResponse[]>([]);
   const [patchRental, setPatchRental] = useState<PatchRentalRequest | null>(null);
   const [total, setTotal] = useState<number>(0);
   const [openRentalModal, setRentalModalOpen] = React.useState(false);
@@ -62,16 +64,16 @@ export default function RentalsPage(rows: [], headCells: []) {
 
   headCells = [
     {
-      id: 'customerId',
+      id: 'customer',
       numeric: true,
       disablePadding: false,
-      label: 'Customer ID',
+      label: 'Customer',
     },
     {
-      id: 'vehicleId',
+      id: 'vehicle',
       numeric: true,
       disablePadding: false,
-      label: 'Vehicle ID',
+      label: 'Vehicle',
     },
     {
       id: 'startDate',
@@ -144,10 +146,26 @@ export default function RentalsPage(rows: [], headCells: []) {
 
   async function deleteRental(id: number) {
     var response = await CarRentalService.deleteRental(id)
+    if (response.status == 400) {
+      enqueueSnackbar(`Failed to delete Rental: ${response?.errors[0]?.reason}`, {
+        variant: 'error'
+      })
+    } else {
+      enqueueSnackbar('Rental Deleted', {
+        variant: 'success'
+      })
+    }
     await refreshRentals();
   }
-  function editRental(rental: RentalResponse) {
-    setPatchRental(rental)
+  function editRental(rental: RentalSearchResponse) {
+    setPatchRental({
+      id: rental.id,
+      customerId: rental.customer.id,
+      endDate: rental.endDate,
+      startDate: rental.startDate,
+      vehicleId: rental.vehicle.id,
+      rentalStatus: rental.rentalStatus
+    })
     setRentalModalOpen(true)
   }
 
@@ -231,8 +249,6 @@ export default function RentalsPage(rows: [], headCells: []) {
     );
   }
 
-
-
   return (
     <div>
       <RentalModal open={openRentalModal} setOpen={setRentalModalOpen} handleClose={handleClose} patchRental={patchRental}></RentalModal>
@@ -260,8 +276,8 @@ export default function RentalsPage(rows: [], headCells: []) {
                       key={row.id}
                       sx={{ cursor: 'pointer' }}
                     >
-                      <TableCell align="left">{row.customerId}</TableCell>
-                      <TableCell align="left">{row.vehicleId}</TableCell>
+                      <TableCell align="left">{row.customer.firstName} {row.customer.lastName}</TableCell>
+                      <TableCell align="left">{row.vehicle.displayName}</TableCell>
                       <TableCell align="left">
                         {new Date(row.startDate).toLocaleDateString()}
                       </TableCell>

@@ -1,10 +1,12 @@
-import { Alert, Box, Button, Collapse, Fade, Modal, Slide, Snackbar, TextField, Typography } from "@mui/material";
+import { Box, Button, Modal, TextField, Typography } from "@mui/material";
 import styles from "./customers.module.css";
 import { CreateCustomerRequest } from "@/api/models/customer.interface";
 import { CarRentalService } from "@/api/carRentalService";
 import { useEffect, useState } from "react";
+import { useSnackbar } from "notistack";
 
 export default function CustomerModal({ open, setOpen, handleClose, patchCustomer }) {
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar()
 
   const [customer, setCustomer] = useState<CreateCustomerRequest | null>(null);
 
@@ -12,12 +14,22 @@ export default function CustomerModal({ open, setOpen, handleClose, patchCustome
 
   const saveCustomer = async () => {
 
+    let result = null;
     if (patchCustomer) {
-      await CarRentalService.patchCustomer(customer!);
+      result = await CarRentalService.patchCustomer(customer!);
     } else {
-      await CarRentalService.createCustomer(customer!);
+      result = await CarRentalService.createCustomer(customer!);
     }
 
+    if (result.status == 400) {
+      enqueueSnackbar(`Failed to save Customer: ${result?.errors[0]?.reason}`, {
+        variant: 'error'
+      })
+    } else {
+      enqueueSnackbar('Customer Saved', {
+        variant: 'success'
+      })
+    }
   }
 
   useEffect(() => {
