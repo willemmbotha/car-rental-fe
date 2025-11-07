@@ -96,7 +96,7 @@ export const CarRentalService = {
     return await response.json();
   },
 
-  deleteCustomer: async function (id: number): Promise<void> {
+  deleteCustomer: async function (id: number): Promise<any> {
     const bearer = localStorage.getItem("DS");
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/customer/${id}`,
@@ -156,7 +156,7 @@ export const CarRentalService = {
     return await response.json();
   },
 
-  deleteVehicle: async function (id: number): Promise<void> {
+  deleteVehicle: async function (id: number): Promise<any> {
     const bearer = localStorage.getItem("DS");
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/vehicle/${id}`,

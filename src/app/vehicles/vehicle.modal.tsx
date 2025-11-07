@@ -182,9 +182,10 @@ export default function VehicleModal({ open, setOpen, handleClose, patchVehicle 
           required
           id="outlined-rentalPrice"
           label="Rental Price"
+
           value={vehicle?.rentalPrice}
           onChange={event => {
-            setVehicle({ ...vehicle, rentalPrice: event.target.value });
+            setVehicle({ ...vehicle, rentalPrice: parseInt(event.target.value, 10) });
           }}
         />
 

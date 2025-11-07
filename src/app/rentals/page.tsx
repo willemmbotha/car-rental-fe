@@ -27,11 +27,12 @@ import { SearchRequest } from '@/api/models/search.interface';
 import EditIcon from '@mui/icons-material/Edit';
 import { RentalResponse, PatchRentalRequest, RentalSearchResponse } from '@/api/models/rental.interface';
 import { useSnackbar } from 'notistack';
+import { HeadCell } from '@/components/models/headCell.interface';
 
 
-export default function RentalsPage(headCells: []) {
+export default function RentalsPage() {
   const { enqueueSnackbar, closeSnackbar } = useSnackbar()
-  const [rentals, setRentals] = useState<RentalSearchResponse[]>([]);
+  const [rentals, setRentals] = useState([]);
   const [patchRental, setPatchRental] = useState<PatchRentalRequest | null>(null);
   const [total, setTotal] = useState<number>(0);
   const [openRentalModal, setRentalModalOpen] = React.useState(false);
@@ -62,8 +63,9 @@ export default function RentalsPage(headCells: []) {
     fetchData();
   }, [searchRequest]);
 
-  headCells = [
+  const headCells: HeadCell[] = [
     {
+
       id: 'customer',
       numeric: true,
       disablePadding: false,

@@ -28,8 +28,9 @@ import { SearchRequest } from '@/api/models/search.interface';
 import EditIcon from '@mui/icons-material/Edit';
 import { Avatar } from '@mui/material';
 import { useSnackbar } from 'notistack';
+import { HeadCell } from '@/components/models/headCell.interface';
 
-export default function VehiclesPage(headCells: []) {
+export default function VehiclesPage() {
   const { enqueueSnackbar, closeSnackbar } = useSnackbar()
   const [vehicles, setVehicles] = useState<VehicleResponse[]>([]);
   const [patchVehicle, setPatchVehicle] = useState<PatchVehicleRequest | null>(null);
@@ -62,7 +63,7 @@ export default function VehiclesPage(headCells: []) {
     fetchData();
   }, [searchRequest]);
 
-  headCells = [
+  const headCells: HeadCell[] = [
     {
       id: 'photoUrl',
       numeric: false,
